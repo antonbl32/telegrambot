@@ -1,17 +1,8 @@
 package by.telegram.bot.handler;
 
-import by.telegram.bot.en.State;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.User;
+import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
-import java.util.List;
+@Component
+public class Handler {
 
-public interface Handler {
-    // основной метод, который будет обрабатывать действия пользователя
-    List<PartialBotApiMethod<? extends Serializable>> handle (User user, String message);
-    // метод, который позволяет узнать, можем ли мы обработать текущий State у пользователя
-    State operatedBotState();
-    // метод, который позволяет узнать, какие команды CallBackQuery мы можем обработать в этом классе
-    List<String> operatedCallBackQuery();
 }

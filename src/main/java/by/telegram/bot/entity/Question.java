@@ -19,8 +19,6 @@ public class Question {
     private State state;
     @Column(name = "ask")
     private String ask;
-    @ElementCollection
-    @CollectionTable(name = "answers", joinColumns = @JoinColumn(name = "question_id"))
-    @Column(name = "answer")
-    private List<String> answer;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "id")
+    private List<AnswerValue> answer;
 }
