@@ -33,7 +33,7 @@ public class MainController {
     public SendMessage defaultAction(long userId, User user, String message) {
         return new SendMessage()
                 .setChatId(userId)
-                .setText(String.format("Hello %s, you've send me %s, i don't know this", user.getFirstName(), message));
+                .setText(String.format("Hello %s, you've send me %s, i don't know this, use /start!", user.getFirstName(), message));
     }
 
     @TelegramCommand(commands = "/some_command", description = "Some command")
@@ -46,8 +46,8 @@ public class MainController {
     }
 
     @TelegramCommand(commands = "/start", description = "FirstCommand")
-    public SendMessage startCommand(long userId, User user) {
-        return message.createMessageStart(userId, user);
+    public void startCommand(long userId,User user) {
+        message.createMessageStart(userId, user);
     }
 
     @TelegramCallbackQuery

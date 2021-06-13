@@ -1,6 +1,5 @@
 package by.telegram.bot.service;
 
-import by.telegram.bot.en.State;
 import by.telegram.bot.entity.AnswerValue;
 import by.telegram.bot.entity.Question;
 import by.telegram.bot.repository.QuestionRepository;
@@ -18,15 +17,16 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
     @Transactional
-    public String getQuestion(State state){
-        return questionRepository.findAllByState(state).getAsk();
+    public String getQuestion(String state){
+        return questionRepository.findQuestionByState(state).getAsk();
     }
     @Transactional
-    public Question getQuestionOnly(State state){
-        return questionRepository.findAllByState(state);
+    public Question getQuestionOnly(String state){
+        return questionRepository.findQuestionByState(state);
     }
     @Transactional
-    public List<AnswerValue> getAllAnswers(State state){
-        return questionRepository.findAllByState(state).getAnswer();
+    public List<AnswerValue> getAllAnswers(String state){
+        System.out.println(questionRepository.findQuestionByState(state).getAnswer());
+        return questionRepository.findQuestionByState(state).getAnswer();
     }
 }

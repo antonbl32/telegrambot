@@ -1,6 +1,5 @@
 package by.telegram.bot.entity;
 
-import by.telegram.bot.en.State;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,8 +16,8 @@ public class UserBot {
     private Integer id;
     @Column(name = "username", nullable = false)
     private String username;
-    @Column(name = "state")
-    private State status=State.NONE;
+    @Column(name = "status")
+    private String status;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "id")
     private List<MyAnswer> myAnswer;
     @Column(name = "chatid")

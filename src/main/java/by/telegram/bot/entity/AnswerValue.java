@@ -15,6 +15,5 @@ public class AnswerValue {
     private Integer id;
     @Column(name = "Value")
     private String value;
-    @ManyToOne
-    private Question question;
+
 }

@@ -27,6 +27,7 @@ public class UserBotService {
         }else{
             UserBot userBot=new UserBot();
             userBot.setChatId(id);
+            userBot.setStatus("NONE");
             if(user.getUserName()!=null){
                 userBot.setUsername(user.getUserName());
             }else{
