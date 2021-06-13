@@ -6,6 +6,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import javax.annotation.PostConstruct;
+
 @Component
 public class Bot extends TelegramLongPollingBot {
     @Value("${bot.name}")
@@ -25,13 +28,16 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        try{
-            SendMessage message=new SendMessage();
-            message.setChatId(String.valueOf(update.getMessage().getChatId()));
-            message.setText("Hello");
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+        if(update.hasMessage()){
+            try{
+                SendMessage message=new SendMessage();
+                message.setChatId(String.valueOf(update.getMessage().getChatId()));
+                message.setText(update.getMessage().getFrom().getUserName());
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }
