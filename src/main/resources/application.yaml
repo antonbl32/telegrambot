@@ -1,0 +1,11 @@
+bot:
+  name: momTinder_bot
+  token: 1869574595:AAFegUz4oJFnjqHcXCXxPCftRHtbhbfCvw8
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bot
+    username: root
+    password: 321000
+  jpa:
+    hibernate:
+      ddl-auto: update
