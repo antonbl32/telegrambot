@@ -18,6 +18,6 @@ public class Question {
     private String state;
     @Column(name = "ask")
     private String ask;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "id")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "question")
     private List<AnswerValue> answer;
 }

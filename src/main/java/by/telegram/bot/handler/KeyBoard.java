@@ -2,17 +2,24 @@ package by.telegram.bot.handler;
 
 import by.telegram.bot.entity.AnswerValue;
 import by.telegram.bot.service.QuestionService;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
-@Data
+
 @NoArgsConstructor
+@Component
 public class KeyBoard {
     private QuestionService questionService;
+    @Autowired
+    public void setQuestionService(QuestionService questionService) {
+        this.questionService = questionService;
+    }
+
     private InlineKeyboardMarkup replyKeyboardMarkup = new InlineKeyboardMarkup();
     public void setState(String state) {
         int callBackId=1;
@@ -27,6 +34,7 @@ public class KeyBoard {
                     row.add(new InlineKeyboardButton().setCallbackData(String.valueOf(callBackId++))
                             .setText(answerValue.get(i+1).getValue()));
                 }
+                list.add(row);
             }
         }
         replyKeyboardMarkup.setKeyboard(list);

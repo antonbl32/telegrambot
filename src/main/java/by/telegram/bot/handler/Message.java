@@ -18,6 +18,11 @@ public class Message {
     private UserBotService userBotService;
 
     @Autowired
+    public KeyBoard getKeyBoard() {
+        return keyBoard;
+    }
+
+    @Autowired
     public void setQuestionService(QuestionService questionService) {
         this.questionService = questionService;
     }
@@ -29,7 +34,6 @@ public class Message {
 
     public SendMessage createMessageStart(Long userId, User user) {
         String text;
-        keyBoard = new KeyBoard();
         if (userBotService.checkUser(userId, user)) {
             text = "Рады снова вас видеть " + userBotService.getUserByIdChat(userId).getUsername() + " попробуем еще раз найти" +
                     " с кем поговорить?";
@@ -37,9 +41,20 @@ public class Message {
             text = "Добро пожаловать " + user.getUserName();
         }
         keyBoard.setState(userBotService.getUserByIdChat(userId).getStatus());
-        return new SendMessage()
-                .setChatId(userId)
-                .setText(text).setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NONE"));
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(userId).setText(text).setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NONE"));
+        return sendMessage;
+
+    }
+    public String getMessageStart(Long userId, User user){
+        String text;
+        if (userBotService.checkUser(userId, user)) {
+            text = "Рады снова вас видеть " + userBotService.getUserByIdChat(userId).getUsername() + " попробуем еще раз найти" +
+                    " с кем поговорить?";
+        } else {
+            text = "Добро пожаловать " + user.getUserName();
+        }
+        return text;
     }
 
     public SendMessage createMessage(Long userId, CallbackQuery callbackQuery, User user) {
