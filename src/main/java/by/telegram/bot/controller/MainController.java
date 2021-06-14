@@ -16,12 +16,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @TelegramBot
 public class MainController {
-    @Autowired
+
     private KeyBoard keyBoard;
     private Message message;
-
     @Autowired
-    public void setMessage(Message message) {
+    public MainController(KeyBoard keyBoard, Message message) {
+        this.keyBoard = keyBoard;
         this.message = message;
     }
 
@@ -43,9 +43,10 @@ public class MainController {
 
     @TelegramCommand(commands = "/start", description = "FirstCommand")
     public SendMessage startCommand(long userId,User user) {
-        InlineKeyboardMarkup replyKeyboardMarkup=keyBoard.getReplyKeyboardMarkup("NONE");
-        String text=message.getMessageStart(userId,user);
-        return new SendMessage().setChatId(userId).setText(text).setReplyMarkup(replyKeyboardMarkup);
+//        InlineKeyboardMarkup replyKeyboardMarkup=keyBoard.getReplyKeyboardMarkup("START");
+//        String text=message.getMessageStart(userId,user);
+//        return new SendMessage().setChatId(userId).setText(text).setReplyMarkup(replyKeyboardMarkup);
+        return message.createMessageStart(userId,user);
     }
 
     @TelegramCallbackQuery

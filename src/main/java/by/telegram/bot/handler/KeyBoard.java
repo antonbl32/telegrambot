@@ -16,16 +16,14 @@ import java.util.List;
 public class KeyBoard {
     private QuestionService questionService;
     @Autowired
-    public void setQuestionService(QuestionService questionService) {
+    public KeyBoard(QuestionService questionService) {
         this.questionService = questionService;
     }
-
     private InlineKeyboardMarkup replyKeyboardMarkup = new InlineKeyboardMarkup();
     public void setState(String state) {
         int callBackId=1;
         List<List<InlineKeyboardButton>> list = new ArrayList<>();
         List<AnswerValue> answerValue= questionService.getAllAnswers(state);
-        if((answerValue.size()%2)==0){
             for (int i = 0; i < answerValue.size(); i+=2) {
                 List<InlineKeyboardButton> row=new ArrayList<>();
                 row.add(new InlineKeyboardButton().setCallbackData(String.valueOf(callBackId++))
@@ -36,7 +34,7 @@ public class KeyBoard {
                 }
                 list.add(row);
             }
-        }
+
         replyKeyboardMarkup.setKeyboard(list);
     }
 

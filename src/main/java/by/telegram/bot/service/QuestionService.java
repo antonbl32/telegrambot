@@ -16,11 +16,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Service
-@Scope(scopeName = "prototype",proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class QuestionService {
     private QuestionRepository questionRepository;
     @Autowired
-    public void setQuestionRepository(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
@@ -34,7 +33,6 @@ public class QuestionService {
     }
     @Transactional
     public List<AnswerValue> getAllAnswers(String state){
-        System.out.println(questionRepository.findQuestionByState(state).getAnswer());
         return questionRepository.findQuestionByState(state).getAnswer();
     }
 }

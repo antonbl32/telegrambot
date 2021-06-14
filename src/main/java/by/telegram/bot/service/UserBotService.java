@@ -12,16 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
-@Scope(scopeName = "prototype",proxyMode= ScopedProxyMode.TARGET_CLASS)
-@Configurable
 public class UserBotService {
     private UserBotRepository userBotRepository;
-
-
     @Autowired
-    public void setUserBotRepository(UserBotRepository userBotRepository) {
+    public UserBotService(UserBotRepository userBotRepository) {
         this.userBotRepository = userBotRepository;
     }
+
     @Transactional
     public boolean checkUser(long id, User user){
         if(userBotRepository.findAllByChatId(id).isPresent()){

@@ -18,7 +18,7 @@ public class UserBot {
     private String username;
     @Column(name = "status")
     private String status;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "id")
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "userBot")
     private List<MyAnswer> myAnswer;
     @Column(name = "chatid")
     private Long chatId;

@@ -11,27 +11,19 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.List;
+
 @Component
 public class Message {
     private KeyBoard keyBoard;
     private QuestionService questionService;
     private UserBotService userBotService;
-
     @Autowired
-    public KeyBoard getKeyBoard() {
-        return keyBoard;
-    }
-
-    @Autowired
-    public void setQuestionService(QuestionService questionService) {
+    public Message(KeyBoard keyBoard, QuestionService questionService, UserBotService userBotService) {
+        this.keyBoard = keyBoard;
         this.questionService = questionService;
-    }
-
-    @Autowired
-    public void setUserBotService(UserBotService userBotService) {
         this.userBotService = userBotService;
     }
-
     public SendMessage createMessageStart(Long userId, User user) {
         String text;
         if (userBotService.checkUser(userId, user)) {
@@ -46,50 +38,52 @@ public class Message {
         return sendMessage;
 
     }
-    public String getMessageStart(Long userId, User user){
-        String text;
-        if (userBotService.checkUser(userId, user)) {
-            text = "Рады снова вас видеть " + userBotService.getUserByIdChat(userId).getUsername() + " попробуем еще раз найти" +
-                    " с кем поговорить?";
-        } else {
-            text = "Добро пожаловать " + user.getUserName();
-        }
-        return text;
-    }
+//    public String getMessageStart(Long userId, User user){
+//        String text;
+//        if (userBotService.checkUser(userId, user)) {
+//            text = "Рады снова вас видеть " + userBotService.getUserByIdChat(userId).getUsername() + " попробуем еще раз найти" +
+//                    " с кем поговорить?";
+//        } else {
+//            text = "Добро пожаловать " + user.getUserName();
+//        }
+//        return text;
+//    }
 
     public SendMessage createMessage(Long userId, CallbackQuery callbackQuery, User user) {
-        if (ObjectUtils.isEmpty(callbackQuery.getData())) {
+        if (!ObjectUtils.isEmpty(callbackQuery.getData())) {
             int callBackId = Integer.valueOf(callbackQuery.getData());
             UserBot userBot = userBotService.getUserByIdChat(userId);
             MyAnswer myAnswer;            String state = userBot.getStatus();
             switch (state) {
                 case "NONE":
-                    if (callBackId == 1) {
                         userBot.setStatus("ONE");
                         myAnswer = new MyAnswer();
                         myAnswer.setQuestion(questionService.getQuestionOnly("NONE"));
-                        myAnswer.getMyAnswers().add(1);
+//                        myAnswer.getMyAnswers().add(1);
+                        List<Integer> ans=myAnswer.getMyAnswers();
+                        ans.add(callBackId);
+                        myAnswer.setMyAnswers(ans);
                         userBot.getMyAnswer().add(myAnswer);
                         userBotService.save(userBot);
                         return new SendMessage()
                                 .setChatId(userId)
                                 .setText(questionService.getQuestion("ONE"))
                                 .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("ONE"));
-                    } else {
+                case "ONE":
+                    if (callBackId == 1) {
+                        userBot.setStatus("TWO");
+                        myAnswer = new MyAnswer();
+                        myAnswer.setQuestion(questionService.getQuestionOnly("ONE"));
+                        myAnswer.getMyAnswers().add(callBackId);
+                        userBot.getMyAnswer().add(myAnswer);
+                        userBotService.save(userBot);
+                        return new SendMessage()
+                                .setChatId(userId)
+                                .setText(questionService.getQuestion("TWO"))
+                                .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("TWO"));
+                    }else {
 
                     }
-                    break;
-                case "ONE":
-                    userBot.setStatus("TWO");
-                    myAnswer = new MyAnswer();
-                    myAnswer.setQuestion(questionService.getQuestionOnly("ONE"));
-                    myAnswer.getMyAnswers().add(callBackId);
-                    userBot.getMyAnswer().add(myAnswer);
-                    userBotService.save(userBot);
-                    return new SendMessage()
-                            .setChatId(userId)
-                            .setText(questionService.getQuestion("TWO"))
-                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("TWO"));
                 case "TWO":
                     userBot.setStatus("THREE");
                     myAnswer = new MyAnswer();

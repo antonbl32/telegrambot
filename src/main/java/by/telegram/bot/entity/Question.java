@@ -18,6 +18,6 @@ public class Question {
     private String state;
     @Column(name = "ask")
     private String ask;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "question")
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<AnswerValue> answer;
 }
