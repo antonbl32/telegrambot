@@ -21,8 +21,8 @@ public class MyAnswer {
     @ManyToOne
     @JoinColumn(name = "userBot_id", nullable = false)
     private UserBot userBot;
-    @ElementCollection
-    @CollectionTable(name="listanswers", joinColumns=@JoinColumn(name="answer"))
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name="listanswers", joinColumns=@JoinColumn(name="myanswer"))
     @Column(name="answer_id")
     @ToString.Exclude
     private Set<Integer> answers;

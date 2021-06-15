@@ -5,6 +5,7 @@ import by.telegram.bot.entity.UserBot;
 import by.telegram.bot.service.MyAnswerService;
 import by.telegram.bot.service.QuestionService;
 import by.telegram.bot.service.UserBotService;
+import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -12,10 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class Message {
@@ -50,7 +48,6 @@ public class Message {
         if (!ObjectUtils.isEmpty(callbackQuery.getData())) {
             int callBackId = Integer.valueOf(callbackQuery.getData());
             UserBot userBot = userBotService.getUserByIdChat(userId);
-            MyAnswer myAnswer;
             String state = userBot.getStatus();
             switch (state) {
                 case "NONE":
@@ -71,8 +68,8 @@ public class Message {
                     } else {
                         return new SendMessage()
                                 .setChatId(userId)
-                                .setText(questionService.getQuestion("ONE"))
-                                .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("ONE"));
+                                .setText(" in future...")
+                                .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NONE"));
                     }
                 case "TWO":
                     userBot.setStatus("THREE");
@@ -117,12 +114,18 @@ public class Message {
                             .setText(questionService.getQuestion("EIGHT"))
                             .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("EIGHT"));
                 case "EIGHT":
-                    userBot.setStatus("NONE");
+                    userBot.setStatus("NINE");
                     this.addAnswer(userBot,callBackId,state);
                     return new SendMessage()
                             .setChatId(userId)
-                            .setText(questionService.getQuestion("NONE"))
-                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NONE"));
+                            .setText(matchUser(userBot))
+                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NINE"));
+                case "NINE":
+                    userBot.setStatus("NONE");
+                    return new SendMessage()
+                            .setChatId(userId)
+                            .setText(matchUser(userBot))
+                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("ONE"));
             }
         } else {
             return createMessageStart(userId, user);
@@ -132,9 +135,9 @@ public class Message {
     public void addAnswer(UserBot userBot,Integer callBackId,String state){
         MyAnswer myAnswer;
         Optional<MyAnswer> listOfMyAnswers=myAnswerService.getByUserBotIdAndQuestionId(userBot.getId(), questionService.getQuestionOnly(state).getId());
-        if(listOfMyAnswers.isPresent()){
+        if(!listOfMyAnswers.isPresent()){
             myAnswer=new MyAnswer();
-            myAnswer.setQuestion(questionService.getQuestionOnly("NONE"));
+            myAnswer.setQuestion(questionService.getQuestionOnly(state));
             myAnswer.setUserBot(userBot);
             Set<Integer> listAnswers=new HashSet<>();
             listAnswers.add(callBackId);
@@ -146,5 +149,26 @@ public class Message {
             myAnswerService.save(myAnswer);
         }
         userBotService.save(userBot);
+    }
+
+    public String matchUser(UserBot userBot){
+        UserBot tagretUser;
+        List<List<MyAnswer>> allAnswers=new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            allAnswers.add(myAnswerService.getAllByQuestion(i));
+        }
+        List<MyAnswer> userBotAnswers=myAnswerService.getAllAnswerByUserBot(userBot.getId());
+        Optional<List<MyAnswer>> targetUserAnswers= allAnswers.stream().filter(a->a.containsAll(userBotAnswers)).findAny();
+        if(targetUserAnswers.isPresent()){
+            tagretUser=targetUserAnswers.get().get(0).getUserBot();
+        }else{
+            tagretUser=null;
+        }
+        if(tagretUser!=null){
+            return "Нет совпадений, попробуйте изменить выбор";
+        }else{
+            return "Ваш собеседник @" +tagretUser.getUsername();
+        }
+
     }
 }
