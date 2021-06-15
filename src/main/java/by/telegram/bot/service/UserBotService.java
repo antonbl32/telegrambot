@@ -22,6 +22,9 @@ public class UserBotService {
     @Transactional
     public boolean checkUser(long id, User user){
         if(userBotRepository.findAllByChatId(id).isPresent()){
+            UserBot userBot=userBotRepository.findAllByChatId(id).get();
+            userBot.setStatus("NONE");
+            userBotRepository.save(userBot);
             return true;
         }else{
             UserBot userBot=new UserBot();

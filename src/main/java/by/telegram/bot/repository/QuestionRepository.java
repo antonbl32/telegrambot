@@ -1,13 +1,10 @@
 package by.telegram.bot.repository;
 
-import by.telegram.bot.entity.AnswerValue;
 import by.telegram.bot.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.*;
-
 @Repository
-public interface QuestionRepository extends JpaRepository<Question,Integer> {
-    Question findQuestionByState(String state);
+public interface QuestionRepository extends JpaRepository<Question, Integer> {
+    Question findQuestionByStateOrderByAsk(String state);
 }

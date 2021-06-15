@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface MyAnswerRepository extends JpaRepository<MyAnswer, Integer> {
-    List<MyAnswer> findAllByUserBot(Integer id);
-
-    List<MyAnswer> findAllByQuestion(Integer id);
+public interface MyAnswerRepository extends JpaRepository<MyAnswer,Integer> {
+    List<MyAnswer> findAllByQuestion_Id(Integer id);
+    Optional<MyAnswer> getByUserBot_IdAndQuestion_Id(Integer userBotId, Integer questionId);
+    List<MyAnswer> findAllByUserBot_Id(Integer userBotId);
 }

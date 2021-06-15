@@ -43,9 +43,6 @@ public class MainController {
 
     @TelegramCommand(commands = "/start", description = "FirstCommand")
     public SendMessage startCommand(long userId,User user) {
-//        InlineKeyboardMarkup replyKeyboardMarkup=keyBoard.getReplyKeyboardMarkup("START");
-//        String text=message.getMessageStart(userId,user);
-//        return new SendMessage().setChatId(userId).setText(text).setReplyMarkup(replyKeyboardMarkup);
         return message.createMessageStart(userId,user);
     }
 

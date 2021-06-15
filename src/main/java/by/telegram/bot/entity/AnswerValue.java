@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
 
@@ -22,6 +23,7 @@ public class AnswerValue {
     @JsonIgnore
     @ToString.Exclude
     private Question question;
+
 
 
 }

@@ -3,20 +3,34 @@ package by.telegram.bot.service;
 import by.telegram.bot.entity.MyAnswer;
 import by.telegram.bot.repository.MyAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.AccessType;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class MyAnswerService {
-    private MyAnswerRepository myAnswerRepository;
+    private final MyAnswerRepository myAnswerRepository;
     @Autowired
     public MyAnswerService(MyAnswerRepository myAnswerRepository) {
         this.myAnswerRepository = myAnswerRepository;
     }
-    public List<MyAnswer> getByUserId(Integer id){
-        return myAnswerRepository.findAllByUserBot(id);
+    @Transactional
+    public List<MyAnswer> getAllAnswerByUserBot(Integer id){
+        return myAnswerRepository.findAllByUserBot_Id(id);
     }
-    public List<MyAnswer> getByQuestionId(Integer id){
-        return myAnswerRepository.findAllByQuestion(id);
+    @Transactional
+    public List<MyAnswer> getAllByQuestion(Integer id){
+        return myAnswerRepository.findAllByQuestion_Id(id);
     }
+    @Transactional
+    public Optional<MyAnswer> getByUserBotIdAndQuestionId(Integer userBotId, Integer questionId){
+        return myAnswerRepository.getByUserBot_IdAndQuestion_Id(userBotId, questionId);
+    }
+    @Transactional
+    public void save(MyAnswer myAnswer){
+        myAnswerRepository.save(myAnswer);
+    }
+
 }
