@@ -3,9 +3,13 @@ bot:
   token: 1869574595:AAFegUz4oJFnjqHcXCXxPCftRHtbhbfCvw8
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bot
-    username: root
-    password: 321000
+    url: jdbc:${CLEARDB_DATABASE_URL:mysql://localhost:3306/heroku_d8199ffc19fe34a}
+#    username: b035a007849916
+#    password: 8b976819
   jpa:
     hibernate:
       ddl-auto: update
+
+
+
+
