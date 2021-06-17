@@ -21,7 +21,6 @@ public class AnswerValue {
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     @JsonIgnore
-    @ToString.Exclude
     private Question question;
 
 

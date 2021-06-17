@@ -2,9 +2,9 @@ package by.telegram.bot.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,9 +22,7 @@ public class MyAnswer {
     @JoinColumn(name = "userBot_id", nullable = false)
     private UserBot userBot;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name="listanswers", joinColumns=@JoinColumn(name="myanswer"))
-    @Column(name="answer_id")
-    @ToString.Exclude
-    private Set<Integer> answers;
-
+    @CollectionTable(name = "listanswers", joinColumns = @JoinColumn(name = "myanswer"))
+    @Column(name = "answer_id")
+    private Set<Integer> answers = new HashSet<>();
 }

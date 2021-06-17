@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserBotService {
     private UserBotRepository userBotRepository;
@@ -46,5 +49,9 @@ public class UserBotService {
 
     public void save(UserBot userBot) {
         userBotRepository.save(userBot);
+    }
+
+    public List<UserBot> getAllUsers(){
+        return userBotRepository.findAll();
     }
 }

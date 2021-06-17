@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -35,5 +36,10 @@ public class QuestionService {
     @Transactional
     public List<AnswerValue> getAllAnswers(String state) {
         return questionRepository.findQuestionByStateOrderByAsk(state).getAnswer();
+    }
+
+    @Transactional
+    public List<String> getAllStates(){
+        return questionRepository.findAll().stream().map(a->a.getState()).collect(Collectors.toList());
     }
 }

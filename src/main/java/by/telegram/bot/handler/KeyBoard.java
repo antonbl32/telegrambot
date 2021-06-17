@@ -21,15 +21,14 @@ public class KeyBoard {
     }
     private InlineKeyboardMarkup replyKeyboardMarkup = new InlineKeyboardMarkup();
     public void setState(String state) {
-        int callBackId=1;
         List<List<InlineKeyboardButton>> list = new ArrayList<>();
         List<AnswerValue> answerValue= questionService.getAllAnswers(state);
             for (int i = 0; i < answerValue.size(); i+=2) {
                 List<InlineKeyboardButton> row=new ArrayList<>();
-                row.add(new InlineKeyboardButton().setCallbackData(String.valueOf(callBackId++))
+                row.add(new InlineKeyboardButton().setCallbackData(String.valueOf(answerValue.get(i).getId()))
                         .setText(answerValue.get(i).getValue()));
                 if(i!= answerValue.size()-1){
-                    row.add(new InlineKeyboardButton().setCallbackData(String.valueOf(callBackId++))
+                    row.add(new InlineKeyboardButton().setCallbackData(String.valueOf(answerValue.get(i+1).getId()))
                             .setText(answerValue.get(i+1).getValue()));
                 }
                 list.add(row);

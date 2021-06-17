@@ -33,4 +33,7 @@ public class MyAnswerService {
         myAnswerRepository.save(myAnswer);
     }
 
+    public List<MyAnswer> gelAll() {
+        return myAnswerRepository.findAll();
+    }
 }
