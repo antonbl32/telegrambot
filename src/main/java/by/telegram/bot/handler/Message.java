@@ -63,8 +63,8 @@ public class Message {
                         this.addAnswer(userBot,callBackId,state);
                         return new SendMessage()
                                 .setChatId(userId)
-                                .setText(questionService.getQuestion("ONE"))
-                                .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("ONE"));
+                                .setText(questionService.getQuestion("TWO"))
+                                .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("TWO"));
                     } else {
                         return new SendMessage()
                                 .setChatId(userId)
