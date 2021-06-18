@@ -32,15 +32,6 @@ public class MainController {
                 .setText(String.format("Hello %s, you've send me %s, i don't know this, use /start!", user.getFirstName(), message));
     }
 
-    @TelegramCommand(commands = "/some_command", description = "Some command")
-    public SendMessage someCommand(long userId, TelegramMessageCommand telegramMessageCommand) {
-        return new SendMessage()
-                .setChatId(userId)
-                .setText(String.format("You've send me %s command with arguments: %s",
-                        telegramMessageCommand.getCommand(), telegramMessageCommand.getArgument()
-                ));
-    }
-
     @TelegramCommand(commands = "/start", description = "FirstCommand")
     public SendMessage startCommand(long userId,User user) {
         return message.createMessageStart(userId,user);
