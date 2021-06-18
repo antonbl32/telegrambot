@@ -1,1 +1,1 @@
-web: java -jar target/bot-0.0.1-SNAPSHOT.war
+web: java $JAVA_OPTS -jar target/bot-0.0.1-SNAPSHOT.war

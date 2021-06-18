@@ -17,11 +17,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @TelegramBot
 public class MainController {
 
-    private KeyBoard keyBoard;
     private Message message;
     @Autowired
-    public MainController(KeyBoard keyBoard, Message message) {
-        this.keyBoard = keyBoard;
+    public MainController( Message message) {
         this.message = message;
     }
 
