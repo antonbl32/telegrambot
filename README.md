@@ -1,6 +1,6 @@
-# telegrambot
+# telegramBot
 TelegramBot prototype version 0.0.1-SNAPSHOT
-## This bot useing:
+## This bot using:
 + Java 8
 + Spring-telegram library 
 + spring boot(core,jpa)
