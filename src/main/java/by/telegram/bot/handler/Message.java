@@ -124,7 +124,7 @@ public class Message {
                     return new SendMessage()
                             .setChatId(userId)
                             .setText(matchUser(userBot))
-                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("EIGHT"));
+                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NONE"));
                 case "EIGHT":
                     userBot.setStatus("NINE");
                     userBotService.save(userBot);
@@ -132,7 +132,7 @@ public class Message {
                     return new SendMessage()
                             .setChatId(userId)
                             .setText(matchUser(userBot))
-                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NINE"));
+                            .setReplyMarkup(keyBoard.getReplyKeyboardMarkup("NONE"));
                 case "NINE":
                     userBot.setStatus("NONE");
                     userBotService.save(userBot);
@@ -187,7 +187,7 @@ public class Message {
         Map<UserBot,Integer> allUsers=new HashMap<>();
         while (iterator.hasNext()) {
             String state=iterator.next();
-            if(!state.equals("NINE") && state.equals("NONE") && state.equals("EIGHT")){
+            if(!state.equals("NINE") && !state.equals("NONE") && !state.equals("EIGHT")){
                 for(MyAnswer myAn: userBot.getMyAnswer()){
                     List<MyAnswer> getAnswer=allAnswers.stream().filter(a->a.getAnswers().containsAll(myAn.getAnswers())).collect(Collectors.toList());
                     if(getAnswer.size()>0){
@@ -202,14 +202,15 @@ public class Message {
                 }
             }
         }
-        if(allUsers!=null) {
+        if(allUsers.size()!=0) {
             tagretUser = allUsers.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
-        }
-
-        if (tagretUser==null) {
+            if(tagretUser.getUsername().equals(userBot.getUsername())){
+                return "Нет совпадений, попробуйте изменить выбор";
+            }else{
+                return "Ваш собеседник @" + tagretUser.getUsername();
+            }
+        }else{
             return "Нет совпадений, попробуйте изменить выбор";
-        } else {
-            return "Ваш собеседник @" + tagretUser.getUsername();
         }
     }
 }
