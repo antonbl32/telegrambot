@@ -2,7 +2,7 @@ bot:
   name: momTinder_bot
   token: 1869574595:AAFegUz4oJFnjqHcXCXxPCftRHtbhbfCvw8
 server:
-  port: ${PORT}
+  port: ${PORT:8080}
 spring:
   datasource:
     url: ${JDBC_DATABASE_URL}
