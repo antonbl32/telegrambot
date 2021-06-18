@@ -2,6 +2,7 @@ package by.telegram.bot.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -24,5 +25,6 @@ public class MyAnswer {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "listanswers", joinColumns = @JoinColumn(name = "myanswer"))
     @Column(name = "answer_id")
+    @ToString.Exclude
     private Set<Integer> answers = new HashSet<>();
 }

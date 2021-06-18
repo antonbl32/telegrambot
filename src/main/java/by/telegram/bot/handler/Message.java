@@ -177,7 +177,6 @@ public class Message {
             myAnswerService.save(myAnswer);
             userBotService.save(userBot);
         }
-
     }
 
     public String matchUser(UserBot userBot) {
@@ -185,41 +184,28 @@ public class Message {
         List<MyAnswer> allAnswers=myAnswerService.gelAll();
         List<String> allStates=questionService.getAllStates();
         Iterator<String> iterator= allStates.listIterator();
-//        List<List<UserBot>> allMatch=new ArrayList<>();
-        List<UserBot> justList=new ArrayList<>();
+        Map<UserBot,Integer> allUsers=new HashMap<>();
         while (iterator.hasNext()) {
             String state=iterator.next();
-            if(state!="NINE" && state!="NONE" && state!="EIGHT"){
-//                allMatch.add(allAnswers.stream().filter(a->a.getQuestion().getState().equals(state))
-//                        .filter(a->a.getAnswers()==userBot.getMyAnswer().stream().filter(b->b.getQuestion().getState().equals(state)))
-//                        .map(a->userBotService.getUserByIdChat(a.getUserBot().getChatId()))
-//                        .collect(Collectors.toList()));
-                justList.addAll(allAnswers.stream().filter(a->a.getQuestion().getState().equals(state))
-                        .filter(a->a.getAnswers()==userBot.getMyAnswer().stream().filter(b->b.getQuestion().getState().equals(state)))
-                        .map(a->userBotService.getUserByIdChat(a.getUserBot().getChatId()))
-                        .collect(Collectors.toList()));
+            if(!state.equals("NINE") && state.equals("NONE") && state.equals("EIGHT")){
+                for(MyAnswer myAn: userBot.getMyAnswer()){
+                    List<MyAnswer> getAnswer=allAnswers.stream().filter(a->a.getAnswers().containsAll(myAn.getAnswers())).collect(Collectors.toList());
+                    if(getAnswer.size()>0){
+                        for(MyAnswer ans:getAnswer){
+                            if(allUsers.containsKey(ans.getUserBot())){
+                                allUsers.put(ans.getUserBot(),allUsers.get(ans.getUserBot())+1);
+                            }else{
+                                allUsers.put(ans.getUserBot(),1);
+                            }
+                        }
+                    }
+                }
             }
         }
-
-        Map<UserBot,Long> userScore=justList.stream().collect(Collectors.groupingBy(e->e, Collectors.counting()));
-        if(userScore!=null) {
-            tagretUser = Collections.max(userScore.entrySet(), (entry1, entry2) -> (int) (entry1.getValue() - entry2.getValue())).getKey();
+        if(allUsers!=null) {
+            tagretUser = allUsers.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
         }
-//        tagretUser= allMatch.stream().filter(a->a.size()>0).filter(a->a.stream().)
 
-//
-//        for (int i = 0; i < 9; i++) {
-//            allAnswers.add(myAnswerService.getAllByQuestion(i));
-//        }
-//
-//        List<MyAnswer> userBotAnswers = myAnswerService.getAllAnswerByUserBot(userBot.getId());
-//        Optional<List<MyAnswer>> targetUserAnswers = allAnswers.stream().filter(a -> a.containsAll(userBotAnswers)).findAny();
-//        System.out.println(allAnswers);
-//        if (targetUserAnswers.isPresent()) {
-//            tagretUser = targetUserAnswers.get().get(0).getUserBot();
-//        } else {
-//            tagretUser = null;
-//        }
         if (tagretUser==null) {
             return "Нет совпадений, попробуйте изменить выбор";
         } else {

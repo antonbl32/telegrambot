@@ -2,6 +2,7 @@ package by.telegram.bot.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.glassfish.grizzly.utils.ArraySet;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class UserBot {
     @Column(name = "status")
     private String status;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userBot")
+    @ToString.Exclude
     private List<MyAnswer> myAnswer;
     @Column(name = "chatid")
     private Long chatId;

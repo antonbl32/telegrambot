@@ -2,6 +2,7 @@ package by.telegram.bot.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,5 +20,6 @@ public class Question {
     @Column(name = "ask")
     private String ask;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    @ToString.Exclude
     private List<AnswerValue> answer;
 }
